@@ -35,8 +35,8 @@
 
             articleContentDiv.innerHTML = 'Carregando conteúdo...';
 
-            // Montando o caminho do arquivo
-            const filePath = `https://raw.githubusercontent.com/m52xq/m52xq.github.io/main/wiki/${articleName}.md`;
+            // Usando encodeURIComponent para garantir que o nome do arquivo seja tratado corretamente
+            const filePath = `https://raw.githubusercontent.com/m52xq/m52xq.github.io/main/wiki/${encodeURIComponent(articleName)}.md`;
 
             try {
                 const response = await fetch(filePath);
