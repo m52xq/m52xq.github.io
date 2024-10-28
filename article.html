@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artigo - Galaxy M52 Wiki</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        #article-content {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="article-title"></h1>
+    <div id="article-content"></div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        const articleName = urlParams.get('p');
+
+        async function loadArticle() {
+            const articleContentDiv = document.getElementById('article-content');
+            const articleTitle = document.getElementById('article-title');
+            articleTitle.textContent = articleName;
+
+            articleContentDiv.innerHTML = 'Carregando conteúdo...';
+
+            const filePath = `https://raw.githubusercontent.com/m52xq/m52xq.github.io/main/${wikiFolder}/${articleName}.md`;
+
+            try {
+                const response = await fetch(filePath);
+                const text = await response.text();
+                articleContentDiv.innerHTML = marked(text); // Usando a biblioteca Marked.js para converter Markdown para HTML
+            } catch (error) {
+                articleContentDiv.innerHTML = 'Erro ao carregar o conteúdo do artigo.';
+            }
+        }
+
+        loadArticle();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Biblioteca Marked.js -->
+</body>
+</html>
