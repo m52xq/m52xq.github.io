@@ -14,20 +14,16 @@
     </div>
 
     <script>
-        // Pasta onde estão os artigos
         const wikiFolder = 'wiki';
         
-        // Função para carregar os artigos
         async function loadArticles() {
             const articleListDiv = document.getElementById('article-list');
             articleListDiv.innerHTML = '';
 
             try {
-                // Busca a lista de arquivos do GitHub
-                const response = await fetch(`https://api.github.com/repos/SEU_USUARIO/SEU_REPOSITORIO/contents/${wikiFolder}`);
+                const response = await fetch(`https://api.github.com/repos/m52xq/m52xq.github.io/contents/${wikiFolder}`);
                 const files = await response.json();
                 
-                // Gera os links dos artigos
                 files.forEach(file => {
                     if (file.name.endsWith('.md')) {
                         const link = document.createElement('a');
