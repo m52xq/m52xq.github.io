@@ -26,7 +26,6 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
         const articleName = urlParams.get('p');
 
         async function loadArticle() {
@@ -36,14 +35,17 @@
 
             articleContentDiv.innerHTML = 'Carregando conteúdo...';
 
-            const filePath = `https://raw.githubusercontent.com/m52xq/m52xq.github.io/main/${wikiFolder}/${articleName}.md`;
+            // Montando o caminho do arquivo
+            const filePath = `https://raw.githubusercontent.com/m52xq/m52xq.github.io/main/wiki/${articleName}.md`;
 
             try {
                 const response = await fetch(filePath);
+                if (!response.ok) throw new Error('Erro ao buscar o artigo');
                 const text = await response.text();
                 articleContentDiv.innerHTML = marked(text); // Usando a biblioteca Marked.js para converter Markdown para HTML
             } catch (error) {
                 articleContentDiv.innerHTML = 'Erro ao carregar o conteúdo do artigo.';
+                console.error(error);
             }
         }
 
