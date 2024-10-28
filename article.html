@@ -18,11 +18,16 @@
             border-top: 1px solid #ccc;
             padding-top: 10px;
         }
+        #error-message {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h1 id="article-title"></h1>
-    <div id="article-content"></div>
+    <div id="article-content">Carregando conteúdo...</div>
+    <div id="error-message"></div> <!-- Div para exibir erros -->
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -31,20 +36,26 @@
         async function loadArticle() {
             const articleContentDiv = document.getElementById('article-content');
             const articleTitle = document.getElementById('article-title');
+            const errorMessageDiv = document.getElementById('error-message');
+            
             articleTitle.textContent = articleName;
 
-            articleContentDiv.innerHTML = 'Carregando conteúdo...';
-
-            // Usando encodeURIComponent para garantir que o nome do arquivo seja tratado corretamente
+            // URL do arquivo Markdown no GitHub
             const filePath = `https://raw.githubusercontent.com/m52xq/m52xq.github.io/main/wiki/${encodeURIComponent(articleName)}.md`;
+
+            // Mostra a URL no console e na div de erro para verificação
+            console.log("Caminho do arquivo:", filePath);
+            errorMessageDiv.textContent = `Tentando carregar o arquivo em: ${filePath}`;
 
             try {
                 const response = await fetch(filePath);
-                if (!response.ok) throw new Error('Erro ao buscar o artigo');
+                if (!response.ok) throw new Error(`Erro ao buscar o artigo. Status: ${response.status}`);
+                
                 const text = await response.text();
-                articleContentDiv.innerHTML = marked(text); // Usando a biblioteca Marked.js para converter Markdown para HTML
+                articleContentDiv.innerHTML = marked(text); // Converte Markdown para HTML
             } catch (error) {
                 articleContentDiv.innerHTML = 'Erro ao carregar o conteúdo do artigo.';
+                errorMessageDiv.textContent = error.message;
                 console.error(error);
             }
         }
