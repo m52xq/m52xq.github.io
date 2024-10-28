@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy M52 Wiki</title>
+</head>
+<body>
+    <h1>Galaxy M52 Wiki</h1>
+    <p>Bem-vindo à Wiki do Galaxy M52! Aqui você encontrará todos os artigos e informações sobre o dispositivo.</p>
+    
+    <div id="article-list">
+        <p>Carregando artigos...</p>
+    </div>
+
+    <script>
+        // Pasta onde estão os artigos
+        const wikiFolder = 'wiki';
+        
+        // Função para carregar os artigos
+        async function loadArticles() {
+            const articleListDiv = document.getElementById('article-list');
+            articleListDiv.innerHTML = '';
+
+            try {
+                // Busca a lista de arquivos do GitHub
+                const response = await fetch(`https://api.github.com/repos/SEU_USUARIO/SEU_REPOSITORIO/contents/${wikiFolder}`);
+                const files = await response.json();
+                
+                // Gera os links dos artigos
+                files.forEach(file => {
+                    if (file.name.endsWith('.md')) {
+                        const link = document.createElement('a');
+                        link.href = file.download_url;
+                        link.textContent = file.name.replace('.md', '').replace('_', ' ').toUpperCase();
+                        link.target = '_blank';
+                        articleListDiv.appendChild(link);
+                        articleListDiv.appendChild(document.createElement('br'));
+                    }
+                });
+            } catch (error) {
+                articleListDiv.innerHTML = 'Erro ao carregar artigos.';
+            }
+        }
+
+        // Carrega os artigos ao iniciar
+        loadArticles();
+    </script>
+</body>
+</html>
